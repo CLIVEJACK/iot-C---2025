@@ -9,7 +9,7 @@
 //{
 //	int num = 10, num2 = 100;
 //	int& ref = num;				// num의 메모리 공간에 ref라는 별명이 붙는다.
-//	int* pn = &num;				// 포인터 선언 > 걍해봄 
+//	int* pn = &num;				// 포인터 선언 > 걍해봄			
 //	int& rref = ref;			// 이런식으로 참조에참조가 가능하다
 //	rref = num2;
 //	cout << rref << ", " << num2 << endl;

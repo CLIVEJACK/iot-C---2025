@@ -6,25 +6,24 @@
 //
 //int main() 
 //{
-//	int s;
+//	
 //	int inVal;
+//
 //	std::cout << "입력받을 갯수를 입력하시오 >>";
 //	std::cin >> inVal;
-//
+//	// 동적할당
 //	int* p = new int[inVal]; // 원래는 정적으로하면 배열 크기에 변수가 들어가지 않지만 동적으로하면 배열의 크기를 변수로 지정가능
-//	std::cout << "입력받은 수는 :" << inVal << std::endl;
 //
+//	std::cout << "입력받은 수는 :" << inVal << std::endl;
 //	for (int i = 0; i < inVal; i++) {
 //		std::cin >> p[i];		// 배열의 이름은 배열의 첫번째 항목을 나타내는 포인터(주소)
-//
 //	}
 //	std::cout << "정수출력:";
-//	//for (int j = 0; j < s; j++) {
-//	//	s[] = 
-//	//	std::cout << "입력받을 숫자를 입력하세요:" << s << std::endl;
-//	//	std::cin >> s;
+//	for (int j = 0; j < inVal ; j++) {
+//		std::cout << p[j] << " "; // 배열을 차곡차곡 출력
+//	}
+//	delete[] p;
 //
-//	//}
 //	return 0;
 //}
 //
