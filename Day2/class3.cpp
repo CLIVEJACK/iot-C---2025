@@ -23,7 +23,7 @@
 //	~MyClass(){}					// 소멸자는 디폴트 생성자에서 앞에 `~`추가해하면됨
 //	void printData() {
 //		cout << "나는 MyClass의 인스턴스 입니다.";
-//		cout << "m_num1: "<< m_num1 << "m_num2: "<< m_num2<< endl;
+//		cout << "m_num1: " << m_num1 << "m_num2: " << m_num2 << endl;
 //		cout << "m_num1: " << m_num1 << "m_num2: " << m_num2 << endl;
 //	}
 //};

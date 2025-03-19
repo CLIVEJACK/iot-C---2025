@@ -1,9 +1,8 @@
 ///*
-//	12.
+//	12. test2에 문제 다시풀었음 ㄱㄱ
 //*/
 //#define _CRT_SECURE_NO_WARNINGS
 //#include <iostream>
-//
 //using namespace std;
 //
 //class Human {
@@ -12,13 +11,14 @@
 //	int age;
 //	char* ptel;
 //public:
-//	Human(const char* n1, int n2, const char* n3) : m_n1(n1), m_n2(n3) {}
-//	~Human(){}
-//	void getData() {
+//	Human(const char* n1, int n2, const char* n3){
 //		strcpy(pname, n1);
 //		age = n2;
 //		strcpy(ptel, n3);
-//		cout << "이름은: " << n1 << "나이는: " << n2 << "전화번호는: " << n3 << endl;
+//	}
+//	~Human(){}
+//	void getData() {
+//		cout << "이름은: " << pname << "나이는: " << age << "전화번호는: " << ptel << endl;
 //	
 //	}
 //};
