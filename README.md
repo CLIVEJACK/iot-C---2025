@@ -1,5 +1,6 @@
 # iot-C++-2025
  C++공부
+ ## 1일차
 - C++
     - C++의 헤더파일 `#include <iostream>`[C++](./Day1/Hello.cpp)
     - 출력문 
@@ -119,6 +120,163 @@
         - 입력인경우
             -
     - 구조체
-        - C 구조체 [C++](./Day1/st_c.cpp)
-        - C++ 구조체 [C++](./Day1/st_c2.cpp)
-        - class [C++](./Day1/st_c3.cpp)   
+        - C 구조체의 기본[C++](./Day1/st_c.cpp)
+        - C++ 구조체의 기본 [C++](./Day1/st_c2.cpp)
+        - class의 기본 [C++](./Day1/st_c3.cpp)   
+
+## 2일차
+- 클래스 
+    - 구조체로 부터 발전됨
+    - 클래스를 구성하는 3가지
+    1. 접근제어 지시자(private, public, protected): 접근지시자를 통해 접근 유무가 가능해짐 
+        - private : 접근 불가능
+        - public : 아무나 접근가능
+        - protected: 상속받은 것만 접근가능 (자신만 접근)
+    2. 멤버변수 - 속성: private 영역
+    3. 멤버함수(메서드) - 기능: public 영역
+    - 객체와 인스턴스는 비슷한 뜻이다
+    - 클래스의 중점으로 하면 인스턴스  
+    - 어떤 인스턴스로 만드냐면 클래스 
+    - 선언 [C++](./Day2/class.cpp)
+        ```C++
+        class A{            // class 첫문자는 대문자 {} 라는 형태로 작성
+            public:         // 접근지시자 
+            int m_num;      // 맴버 변수. m_이라는 키워드는 멤버변수이다
+
+            void set(int num){      // 맴버 함수 또는 메서드라고 불림
+                m_num = num;
+            }
+
+            void print(){           // 맴버 함수 또는 메서드라고 불림
+                cout << "나는 A클래스의 인스턴스 입니다. " << "num: "<<m_num << endl;
+            }
+        }
+
+        int main()
+        {
+            A obj;          // 객체를 생성 > 호출. A라는 타입 obj라는 변수
+            obj.print();    // 맴버접근 연산자'.'을 사용해서 print를 출력
+            obj.set(10);    // obj의 set를 불러와 10넣기
+            obj.print();        
+            return 0;
+        }
+        ```
+- 생성자 constructor [C++](./Day2/class3.cpp)   
+    - 클래스는 생성자 호출로 객체가 만들어진다. 
+    - 생성과 동시에 초기화 하려면 맴버함수를 만들어야함 > 객체 생성시 구조에 맞는 생성자가 없으면 객체는 생성되지 않는다
+    - 생성자는 초기화 기능에 사용한다.
+    - 생성자는 오버로딩이 가능하다.
+    - 프로그래머가 생성자를 작성하면 더이상 디폴트 생성자는 제공되지 않는다.
+        - `클래스 이름과같은 (초기화할 입력값){조건}`으로 만듬
+        - 선언
+            ```C++
+            class MyClass {
+            private:
+                int m_num1;
+                int m_num2;
+            public:
+                MyClass() {}		// main에 MyClass obj; 디폴트로 생성하면 이런식으로 디폴트로 생성하면 가능하다 
+                MyClass(int num1, int num2) {				//명시함	// 클래스 이름과 같아야함(입력){조건} / 생성자(입력받는두개 받는 값)
+                    m_num1 = num1;
+                    m_num2 = num2;
+                }
+                void printData() {
+                    cout << "나는 MyClass의 인스턴스 입니다.";
+                    cout << "m_num1: "<< m_num1 << "m_num2: "<< m_num2<< endl;
+                    cout << "m_num1: " << m_num1 << "m_num2: " << m_num2 << endl;
+
+                }
+            };
+            int main()
+            {
+                MyClass obj;		// 디폴트 생성자를 받기때문에 문제없이 작동해야하지만 명시적으로 생성자를 생성하면 디폴트 생성자는 호출되지 않는다
+                MyClass obj2(100, 200);		// 생성과 초기화는 같이 못하지만 2개의 초기화를 받는 걸 생성해야 가능
+                obj2.printData();	
+
+                return 0;
+            }
+            ```
+- 문자열 처리하기 [C++](./Day2/문자열처리하기.cpp)
+    - 문자열은 주소니까 포인터를 쓴다고 생각
+    - 선언
+        ```C++
+        int main()
+        {
+            char str[20] = "웅나나";
+            cout << str << endl;
+
+            char str2[20];
+            //str2 = "김영희";		// 배열이름은 주소다 > 주소에 문자열을 못넣음
+            strcpy(str2, "김영희");	// 변수 선언 후 상수나 변수로 문자를 입력받으면 복사해서 넣으면 됨.
+            cout << str2 << endl;
+
+
+            //char* str3 = nullptr;  // 이런식으로는 못함
+            char str3[100];			//  문자열을 저장하는 공간
+            cout << "이름입력 >> ";
+            cin >> str3;
+            cout << str3 << endl;
+
+            const char* name;		// 포인터로 문자열 입력 const
+            name = "김철수";		
+            cout << name << endl;
+
+            //	name = str2			char str2[] = "김영희";
+
+            return 0;
+        }
+        ```
+- 변수 초기화 [C++](./Day2/init.cpp)
+    - 선언 
+        ```C++
+        int main()
+        {
+            int num = 3;			// c 스타일 . 복사 초기화 : 3을 복사해서 num에 넣기
+            int num2(30);			// C++ 스타일. 직접 초기화 : 함수 호출 같은모양
+            int num3{ 300 };		// 중괄호 직접 초기화: 함수 모양같아서 이래만듬?
+            int num4 = { 3000 };	// 중괄호 복사 초기화 
+
+            int x = 3.14;
+            int x1{3.14};
+
+            cout << num << endl;
+            cout << num2 << endl;
+            cout << num3 << endl;
+            cout << num4 << endl;
+            cout << x << endl;
+            cout << x1 << endl;
+
+            return 0;
+        }
+        ```
+- 멤버 초기화 - 콜론초기화 사용 [C++](./Day2/init4.cpp)
+    1. 상수 멤버변수 초기화
+    2. 레퍼런스 초기화
+    3. 객체를 멤버로 가지는 경우
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
