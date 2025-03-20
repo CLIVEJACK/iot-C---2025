@@ -14,7 +14,7 @@
 //	}
 //	Point add(const Point& other) {
 //		printf("add() call!!\n");
-//		return Point(x + other.x, y + other.y);
+//		return Point(x + other.x, y + other.y);			// 난중에 물어보기 
 //	}
 //};
 //

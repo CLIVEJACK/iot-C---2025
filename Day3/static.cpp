@@ -13,7 +13,7 @@
 //	StaticTest();
 //	void print();
 //};
-//int StaticTest::static_n = 10;			// 스테딕테스트에 있는 스테틱엔을 넣어라 / static멤버 변수 초기화는 클래스 외부에서 이루어져야한다.
+//int StaticTest::static_n = 10;// 스테딕테스트에 있는 스테틱엔을 넣어라 / static멤버 변수 초기화는 클래스 외부에서 이루어져야한다.
 //StaticTest::StaticTest() {
 //	n = 20;
 //	//static_n = 10;
@@ -27,7 +27,6 @@
 //	StaticTest ob1, ob2;
 //	ob1.print();
 //	ob2.print();
-//
 //
 //	ob2.static_n = 1000;
 //	ob2.n = 50;

@@ -279,14 +279,132 @@
 ## 3일차
 - 생성자
     - 복사 생성자 
-        - 생성자에서 자동적으로 하는 기능으로 생성문을 1개만 만들어도 호출은 여러번 가능하다 
+        - 생성자에서 자동적으로 하는 기능으로 생성문을 1개만 만들어도 호출은 여러번 가능하다 [C++](./Day3/copyconstructor.cpp)
         - 자신과 같은 타입의 객체를 인자로 받는다.
         - 복사 생성자가 정의되어 있지 않다면 디폴트 복사 생성자가 생성된다.
+        - 복사 생성자는 객체를 `&`으로 참조한다 [C++](./Day3/copyconstructor2.cpp)
+        - 선언
+            ```C++
+            Person(const Person& other) {		// 복사생성자 / 객체를 복사해서 새로운 (함수)를 만든다/ Person&은 객체를 참조한다
+            printf("copy constructor!!\n");		// 이게 실행되면 복사생성자가 만들어짐
+            this->age = other.age;			
+            strncpy(this->name, other.name, strlen(other.name) + 1);
+            ```
     - 변환 생성자
-        - 다른 타입의 객체로 변환될때 호출되는 생성자.
+        - 다른 타입의 객체로 변환될때 호출되는 생성자. 타입을 한개만 가지는 생성자 [C++](./Day3/변환생성자1.cpp)
+        - 선언 
+            ```C++ 
+                explicit MyClass(int value) {					// explicit 묵시적으로 변환이 일어나는걸 방지함
+                printf("변환 생성자 호출!!");
+                this -> value = value;			// 변환생성자 int인데 MyClass로 바뀌었는데 정수형 10이 나온다
+            }   // int타입의 클래스가 마이클래스 타입으로 바뀜 > 타입이 같아야 호출이 되지만 타입을
+                // 마이클래스로 바꿔서 위에있는 마이클래스가(변환생성자가) 작동함
+            int main(){
+                //MyClass obj = 10;		// 변환생성자 호출 -- 객체의 변환이 일어남 / explicit를 썼기때문에 오류가남
+	            //obj.printMyClass();	// 
+                
+                MyClass obj2 {10};		// 인자 값을 하나만 받는 것 
+                obj2.printMyClass();		// obj가 value 값이 된다 > 10
+            }
+            ```
+        - 묵시적 변환을 통해 임시 객체가 생성될 가능성을 가지고 있다 > 
+	    - 묵시적 변환: 어떠한 함수가 있을때 이 함수의 매개변수의 자료형이 객체라면 실인수의 값은 자료형에 맞는 객체를 대입해야 정상적으로 작동하는데 
+	       변환 생성자의 경우 묵시적 변환을 통해서 그 객체가 아닌 객체가 가지고 있는 멤버의 타빙으로도 생성자의 호출이 이루어지는 경우를 말한다.
+    - 이동 생성자 [C++](./Day3/moveCon2.cpp)
+        - 이동생성자는 `&&`참조 연산자로 상수를 호출할 수있다 
+        - 선언 
+            ```C++
+                class Human {
+                char name[10];
+                int age;
+            public:
+                Human(Human&& other) noexcept {	//noexcept 예외를 발생할수없는 함수 / &&을 붙여서 사용
+                    printf("이동 생성자 호출\n");
+                    strcpy(this->name, other.name);
+                    this->age = other.age;
+                }
+                	void printHuman() {
+                    printf("name: %s, age: %d\n", this->name, this->age);
+                }
+            };
+            int main()
+            {
 
+                Human h3(move(h));		// 이동생성자를 통해서 출력 - 선언: (std::move(h)); 
+                h3.printHuman();		// 복사랑 다르게 마냥 이동만해서 빠르다.?
+            }
+            ```
+- 지역변수 
+    - static: 클래스 맴버이다 this 포인터가 없다. [C++](./Day3/static.cpp)
+    - 스테틱은 객체들에서 공유후 모든 객체들이 바뀐다.
+    - 선언  
+        ```C++
+        class StaticTest {
+        public:
+            int n;
+            static int static_n;			//static 멤버 변수
+            StaticTest();
+            void print();
+        };
+        int StaticTest::static_n = 10;// 스테딕테스트에 있는 스테틱엔을 넣어라 / static멤버 변수 초기화는 클래스 외부에서 이루어져야한다.
+        StaticTest::StaticTest() {
+            n = 20;
+            //static_n = 10;
+        }
+        void StaticTest::print() {
+            cout << "Static_n: " << static_n << "n: " << n << std::endl;
+        }
 
+        int main()
+        {
+            StaticTest ob1, ob2;
+            ob1.print();      // Static_n: 10  n: 20
+            ob2.print();      // Static_n: 10  n: 20
+            ob2.static_n = 1000;    // 스테틱 값변경
+            ob2.n = 50;             // 스테틱 값변경
+            ob2.print();	// Static_n: 1000  n: 50		
+            ob1.print();    // Static_n: 1000  n: 20  여기n은 스테틱에 포함되어있지 않아서 변경이 안됨
 
+            return 0;
+        }
+        ```
+    - 다중정의
+        - 연산자 오버로딩 [C++](./Day3/operator.cpp) 
+        - add메서드와 복사 생성자를 만들기 [C++](./Day3/operator2.cpp) 
+        - 선언  
+            ```C++
+            #include <iostream>
+
+            class Point {
+            public:
+                int x, y;
+                Point(int ax = 0, int ay = 0): x{ ax }, y(ay) {
+                    printf("constructor coll!\n");
+                }
+                void showPoint() {
+                    printf("x: %d, y: %d\n", x, y);
+                }
+                Point add(const Point& other) {
+                    printf("add() call!!\n");
+                    return Point(x + other.x, y + other.y);
+                }
+            };
+
+            int main()
+            {
+                Point obj(10, 20);
+                obj.showPoint();
+
+                Point obj2(30, 40);
+                obj2.showPoint();
+
+                Point obj3;		        //obj객체가 생성
+                obj3 = obj.add(obj2);	// 포인터 타입의 출력이있어서 포인터를 쓴다 받으려면 참조가 필요하다
+                obj3.showPoint();		
+
+                return 0;
+            }
+            ```
 
 
 
