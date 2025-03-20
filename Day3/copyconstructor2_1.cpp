@@ -15,7 +15,7 @@
 //public:
 //	Person(const char* name, int age) {
 //		printf("Constructor call!!\n");
-//		this-> name = new char(strlen(name) + 1);		// 동적할당 이거 소괄호인데?
+//		this-> name = new char[strlen(name) + 1];		
 //		strcpy(this->name, name);
 //		this->age = age;
 //	}
