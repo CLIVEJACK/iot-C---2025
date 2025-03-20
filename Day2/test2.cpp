@@ -15,8 +15,8 @@ private:
     char* ptel;
 public:
     Human(const char* n1, int n2, const char* n3) {
-        pname = new char[strlen(n1) + 1];  // 메모리 할당
-        strcpy(pname, n1);
+        pname = new char[strlen(n1) + 1];  // 메모리 할당 : 위에 char에서 배열을 할당하지 않아서 메모리를 할당해야함 ex) char* pname[20]이런식으로 안해서
+        strcpy(pname, n1);  // 이런식으로 할당받은 메모리에 값을 pname으로 값을 복사함
         age = n2;
         ptel = new char[strlen(n3) + 1];  // 메모리 할당
         strcpy(ptel, n3);
