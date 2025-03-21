@@ -433,7 +433,51 @@
             inline Point operator+(int n, const Point& other) { // 전역함수		  //inline은 함수를 내부의 코드를 다시 실행가능 
 	        return Point(n + other.x, n + other.y); 
             ```
-        - oprator 선언해서 객체와 정수값을 더하는게 가능
+        - oprator 선언해서 객체와 정수값을 더하는게 가능 [C++](./Day4/operator6.cpp)
+         
+        	/*함수 원형에 friend 선언을 하면 private또는 protected 멤버의 접근이 허용된다.*/
+	        friend Complex operator*(int n, const Complex& other);		
+	        friend std::ostream& operator<<(std::ostream& out, const Complex& other);
+- 매크로 함수 
+    - 매크로함수는 전처리가 처리하며 속도가 컴파일 보다 빠르다 
+    - 매크로 함수는 `#`전처리가 하지만 `inline`함수는 컴파일러가 처리한다.
+    - 매크로 함수는 대부분 대문자로 작성한다.
+    - 선언
+        ```C++
+        #include <iostream>
+
+        #define ADD(a, b)	# a"+" #b			//#은 매크로기능이다, 전처리
+        #define PI			3.14				// 전처리는 매우빠르다
+        #define MSG(x, y, z)	x ## y ## z
+        int main()	
+        {
+            printf("ADD(a, b) %s\n", ADD(10, 20));
+            printf("MSG(x, y, z): %s\n", MSG("macro+", "orperator", "test"));
+
+            return 0;
+        }
+        ```
+    - 함수 탬플릿
+        - 여러가지 자료형을 템플릿 인자로 받아 함수 내부에서 활용한다.
+        - 다형성과 재활용이 특징이다 
+        - 선언 
+            ```C++
+            /*템플릿 적용*/
+            template <typename T>		// T를 템플릿해서 인자를 
+            T Add(T a, T b) {
+                return a + b;
+            }
+            int main()
+            {
+                std::cout << Add(10, 20) << std::endl;
+                std::cout << Add(1.1, 2.2) << std::endl;
+
+                return 0;
+            }
+            ```
+        operator7.cpp 부터 작성
+
+    
 
 
 
