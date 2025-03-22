@@ -1,11 +1,11 @@
 ///*
-//	템플릿 매개변수 : 뭔지 ㅁ?ㄹ
+//	18?.템플릿 매개변수 : 뭔지 ㅁ?ㄹ
 //*/
 //
 //#include <iostream>
 //using namespace std;
 //
-//template <typename T, int sz>		
+//template <typename T, int sz>	// 매개변수는 직접 초기화가 가능하다
 //class CTest {
 //private:
 //	T ary[sz];

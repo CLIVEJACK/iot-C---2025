@@ -438,7 +438,7 @@
         	/*함수 원형에 friend 선언을 하면 private또는 protected 멤버의 접근이 허용된다.*/
 	        friend Complex operator*(int n, const Complex& other);		
 	        friend std::ostream& operator<<(std::ostream& out, const Complex& other);
-- 매크로 함수 
+- 매크로 함수 [C++](./Day4/inline.cpp), inline:  [C++](./Day4/inline2.cpp)
     - 매크로함수는 전처리가 처리하며 속도가 컴파일 보다 빠르다 
     - 매크로 함수는 `#`전처리가 하지만 `inline`함수는 컴파일러가 처리한다.
     - 매크로 함수는 대부분 대문자로 작성한다.
@@ -460,11 +460,14 @@
     - 함수 탬플릿
         - 여러가지 자료형을 템플릿 인자로 받아 함수 내부에서 활용한다.
         - 다형성과 재활용이 특징이다 
+        - 탬플릿은 선언과 함수정의가 분리 될수 없다.
+        - 탬플릿에 typename를 작성하지 않으면 출력부분에 명시적으로 타입을 작성해야함
+        - 탬플릿의 매개변수가 여러개인경우는 typename를 넣을갯수만큼 만든다
         - 선언 
             ```C++
             /*템플릿 적용*/
             template <typename T>		// T를 템플릿해서 인자를 
-            T Add(T a, T b) {
+            T Add(T a, T b) {           // 윗줄처럼 탬플릿 선언과 동시에 함수를 정의해야한다.
                 return a + b;
             }
             int main()
@@ -474,8 +477,191 @@
 
                 return 0;
             }
+            /*특수한 경우의 탬플릿*/
+            template <typename T>			//템플릿 선언(일반화) 선언 : template <typename 선언이름>
+            T func(T a, T b) {				// 템플릿 함수
+                cout << "type: T" << endl;
+                return a + b;
+            }
             ```
-        operator7.cpp 부터 작성
+        - typename 를작성하지 않은경우
+        - 선언
+            ```C++
+            /*typename 를작성하지 않은경우*/
+            template <>							// 내가 지정하고 싶은 타입이 있으면 typename 을 아지않고  출력에서 명시한다 
+            int func <int>(int a, int b) {		// 템플릿 특수화 - 템플릿 일반화중 특별한 타입만 처리할 경우 // 
+                cout << "type: <int>" << endl;	// 명시적으로 인트가 자료형으로 포함되어있음
+                return a + b;					
+            }
+
+            int manin()
+            {
+                cout << func(10, 20) << endl;
+                cout << func(10.5, 20.5) << endl;
+
+                cout << func<double>(10.1, 20.2) << endl;	// 이게 원칙적으로 
+                cout << func<char>(100, 10) << endl;		// 명시적으로 <타입>으로 작성해도됨
+
+                return 0;
+            }
+            ```
+        - 템플릿 매개변수가 여러개인경우
+        - 선언
+            ```C++
+            #include <iostream>
+            using namespace std;
+
+            template <typename T, typename T2>	// 템플릿이 여러개인 경우 typename을 붙인다
+            void func(T a, T2 b) {				// 매개변수 이름은 'T a'는 rhs 'T b'는 lhs
+                cout << a << endl;
+                cout << b << endl;
+            }
+            int main()
+            {
+                func(10, 3.14);
+                func("Template", 3.14);
+                func<const char*, double>("Hello", 3.1415);
+
+
+                return 0;
+            }
+            ```
+        - 클래스 템플릿 : 탬플릿을 자료형으로 변경해두려면 이런식으로 작성해야함
+        - 기존 클래스와 동일한 구조로 작성함
+            - 선언
+                ```C++
+                #include <iostream>
+
+                template <typename T>       // 탬플릿은 함수 선언과 동시에 함수를 정의해야함
+                class CTemplate {           //클래스 형태로 작성해서 
+                private:
+                    T data;
+                public:
+                    CTemplate(T d) { data = d; }		// T타입에 d를 넣음  함수 선언과 정의를 같이함
+                    T getData() { return data; }
+                };
+
+                int main()
+                {
+                    CTemplate<int> obj(100);
+                    printf("data: %d\n", obj.getData());
+
+                    CTemplate<std::string> obj2("클래스 템플릿 테스트");
+                    std::cout << obj2.getData() << std::endl;
+
+                    return 0;
+                }
+                ```
+
+        - 클래스 탬플릿 선언시 typename를 작성해야한다
+            - 선언 
+                ```C++
+                #include <iostream>
+
+                template <typename T>       // 기본적으로 작성하는 방법
+                class CTest {
+                private:
+                    T num;
+                public:
+                    CTest(T n): num(n){}
+                    T getData() { return num; }
+                };
+
+                template <>				//클래스 템플릿의 특수화
+                class CTest<char> {		// <타입> 특수한 타입
+                private:
+                    char data;
+                public:
+                    CTest(char d) : data(d) {}
+                    char getData() { return data; }
+                };
+
+                int main()
+                {	
+                    CTest<int> obj(10);		//클래스 템플릿은 반드시 인스턴스 생성시 typename을 작성해야한다.  <int>를 꼭 작성해야한다
+                    std::cout << obj.getData() << std::endl;
+
+                    CTest<int> obj2('a');		//클래스 템플릿은 반드시 인스턴스 생성시 typename을 작성해야한다.  <int>를 꼭 작성해야한다
+                    std::cout << obj2.getData() << std::endl;
+                    return 0;
+
+                }
+                ```
+        - 탬플릿 매개변수: 쓰기기능이 있는 함수
+        - 템플릿 매개변수는 직접 초기화도 가능하다 `int, char,....`
+            ```C++
+            #include <iostream>
+            using namespace std;
+
+            template <typename T, int sz>	// 매개변수는 직접 초기화가 가능하다
+            class CTest {
+            private:
+                T ary[sz];
+            public:
+                T& operator[](int idx) {		// 쓰기 가능 인덱스
+                    if (idx < 0 || idx >= sz) {
+                        cout << "Error" << endl;
+                        exit(1);
+                    }
+                    return ary[idx];
+                }
+                void getData() {
+                    for (int i = 0; i < sz; i++) {
+                        cout << ary[i] << endl;     // 배열의 첫번째 주소는 이름이다
+                    }
+                }
+            };
+
+            int main()
+            {
+                CTest<int, 5> obj;
+                obj.operator[](0) = 10;			// 10의 값을 읽어들어옴
+                obj[1] = 20;
+                obj[2] = 30;
+                obj[3] = 40;
+                obj[4] = 50;
+                
+                obj.getData();
+
+                cout << obj[0] << endl;
+
+                return 0;
+            }
+            ```
+
+    - 단항연산자 
+        - 단항연산자 오버로딩: 반환형 > `operator[연산자]()` 이런식으로 쓴다
+            - 선언 
+                ```C++
+                #include <iostream>
+
+                class Money {
+                private:
+                    int money;
+                public:
+                    Money(int m = 0): money(m){}        
+                    int operator()() {      // 반환형 연산자
+                        return money;
+                    }
+                    void operator()(int m) {
+                        money += m;
+                    }
+                };
+
+                int main()
+                {
+                    Money m;
+                    printf("money: %d\n", m.operator()());
+                    m(1000);					//출력을 이래해도됨
+                    printf("monet: %d\n", m.operator()());	
+                    m.operator()(1000);			// 이게 정석임 
+                    printf("monet: %d\n", m.operator()());		
+
+                    return 0;
+                }
+                ```
+
+
 
     
 
