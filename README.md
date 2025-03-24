@@ -660,6 +660,163 @@
                     return 0;
                 }
                 ```
+## 5일차 
+
+- Inheritance(상속) : 부모에서 부터 자식에게 물려준다 [C++](./Day5/inheritance.cpp)
+    - 클래스를 생성할때 `: 접근제어자 상속받을클래스` 로 설정하다.
+    - 자식 클래스의 인자는 부모에서 부터 받는 인자와 사신의 인자를 같이 작성한다 
+    - 접근 제어자를 private로 설정하면 자식클래스에서 호출해서 사용이 불가능하지만 [C++](./Day5/inheritance2.cpp)
+        prorected를 사용하면 자식 클래스에서도 호출이 가능하다.
+    - 상속관계에서는 이니셜라이즈를 사용하는게 좋다 [C++](./Day5/inheritance3.cpp)
+        - 선언 
+        ```C++
+        public:
+        Car(int ag) : gasolineGaug(ag) {}		// 콜론초기화(이니셜라이즈) gasolineGaug(ag)는 ag로 초기화한다 
+        int getGasGauge() { return gasolineGaug;
+        ```
+    - 상속관계에서 객체 생성은 생성이 끝난후에 소멸이 일어난다 [C++](./Day5/inheritance4.cpp)
+        - 객체를 생성할때 호출되는 생성자와 생성자의 샐행은 다르다 즉 생성자의 호출과 생성의 실행은 다르다
+    - 객체 포인터: 포인터다 > 객체를 가리키는 포인터이다 [C++](./Day5/objPointer.cpp)
+        - 객체 포인터에 접근하려면 ->(에로우)로 함수를 지정하여 값을 출력한다 
+            - 선언 : `객체-> 함수()` 이러면 객체로 함수의 값을 출력한다 
+    - 객체의 동적 생성 [C++](./Day5/objPointer2.cpp)
+        - 객채의 동적생성 - 선언은 `클래스* 객체 = new 클래스이름{};` 식으로 한다 
+    - 포인터를 통해서 접근할때는 `->(애로우)`를 쓰거나 `역참조(*ptr).` 를 써야한다 [C++](./Day5/objPointer3.cpp)
+        - ex `ptr->` 과 `(*ptr)` 은 같은 뜻이다
+    - 객체 포인터를 초기화하는 방법 [C++](./Day5/objPointer4.cpp)
+        - nullptr로 초기화하면 가독성과이 좋아지고 오류가 덜난다 
+    - 상속에서 객체 포인터 [C++](./Day5/objPointer5.cpp)
+        - 오버라이딩이 가능
+        - 업캐스팅: 부모타입의 포인터로 자식타입의 객체를 가리키면 객체가 부모타입으로 업캐스팅 된다. [C++](./Day5/objPointer5.cpp)
+            - 예시로 부모는 자식을 손가락질 해도되지만 자식을 부모를 손가락질하면 안됨 하지만 출력은 부모의 객체에있는걸 출력함
+        - 다운캐스팅: 자식 포인터로 부모 객체를 가릴킬 수는 없다 [C++](./Day5/objPointer6.cpp)
+            - 부모타입을 일시적으로 자식으로 만들어서 가리키는건 가능하다 
+        objPointer7부터 하면됨
+
+- 가상클래스 virtual function [C++](./Day5/virtual.cpp)
+    - 메서드 작성시에 작성함 
+    - virtual이라는 키워드가 있으면 가상에만 존재하고 상속되어있는 값을 넘어간다.
+    - 파생클래스에서 재정의할 것을 약속받은 멤버함수를 말하며 Base 클래스의 멤버 함수에 virtual 키워드를 사용하여 만든다.
+    - 객체 포인터의 다형성으로 기초 클래스 타입의 포인터로 파생 클래스의 객체를 가리키면 접근은 기초 클래스 멤버로 제한된다.
+        애때 오버라이딩된 파생 클래스의 멤버를 사용하기 위해서는 기초 클래스의 멤버 함수를 가상함수로 만들면 된다.
+        이것은 컴파일시 포인터형으로 바인딩되지 못하고 런타임에서 포인터가 어떤 객체를 가리키고 있는지에 따라서 바인딩할 함수를 결정한다.
+    - 선언 
+        ```C++
+        class Base {
+        public:
+            virtual void func1() { cout << "B::func1()" << endl; }		// 가상함수화 : virtual이라는 키워드를 앞에 붙이면 됨
+            virtual void func2() { cout << "B::func2()" << endl; }		// 가상함수화
+            void func3() { cout << "B::func3()" << endl; }
+        };
+        class Derived : public Base {
+            void func1() override{ cout << "D::func1()" << endl; }		// override키워드는안써도되지만 가상함수를 재정의하는 멤버함수를 나타낸면 가시성이 좋아진다
+            void func3() { cout << "D::func3()" << endl; }
+            void func4() { cout << "D::func4()" << endl; }
+        };
+
+        int main()
+        {
+            Base b;
+            Derived d;
+            Base* bptr = new Derived();			// 업케스팅 / 자식타입을 동적할당 정의를 하고 부모타입의 포인터 타입으로 불러옴 / 이러면 문제없음
+
+            bptr->func1();			//base클래스의 func1() 은 가상함수로 선언되어 Derived 클래스의 fucn1() 호출된다./ D::func1()
+            bptr->func2();			//base클래스의 func1() 은 가상함수로 선언되었지만 오버라이딩(재정의)이 되지 않았다./ B::func2()
+            bptr->func3();			//포인터 타입의 호출 함수가 결정된다. /B::func3()
+
+            //bptr->func4();		//객체 포인터가 가리키는 값을 벗어난다.
+
+            delete bptr;
+            bptr = &b;
+            bptr->func1();          //B::func1()
+            bptr->func2();          //B::func2()
+            bptr->func3();          //B::func3()
+
+            return 0;
+        }
+        ```
+    - virtual Class [C++](./Day5/virtual2.cpp)
+        - 순수 지정자: 
+            - 순수 지정자를 가지는 메서드를 순수 가상 함수라 하며, 이 순수 가상 함수를 가지는 클래스
+            - 또한 추상클래스는 객체를 생성 할수 없다 - 순수가상 함수 대문에 
+            - 순수 가상함수는 상속 받은 클래스는 오버로라이딩(재정의)가 필수다!!!!
+        - 선언
+            ```C++
+            #include <iostream>
+
+            class Cinterface {
+            public:
+                Cinterface() { std::cout << "CInerface constructor" << std::endl; }
+                virtual void getData() const = 0;	//메서드 작성/ 순수 가상 함수> =0 /const = 0;는 몸통자체가 없다 == 객체를 생성할 수없다.
+                                                    // 순수 가상함수는 몸체가 없어서 오버라이딩을 꼭해서 작성해라 라는 뜻
+
+            };
+            class CinSub : public Cinterface {		// 순수 가상함수 == 상속한놈은 나를 재정이하라 
+            public:
+                CinSub() { std::cout << "Cinsub constructor" << std::endl; }
+                void getData() const override {				// 순수 가상함수는 오버라이딩을 꼭해야한다/ 재정의를 해야 출력이 가능하다 
+                    std::cout << "Pure Virtual function()" << std::endl;
+                }
+            };
+
+            int main()
+            {
+                //Cinterface obj;
+                CinSub obj;
+                obj.getData();
+                return 0;
+            }
+            ```
+    - 추상 자료형
+        - 추상 자료형을 이용해서 동적 할당된 객체를 참조할때는 메모리 해제 시 참조 타입의 소멸자만 호출되어 메모리 누수가 발생한다
+            따라서 상위 클래스의 소멸자를 가상으로 만들어 실타입의 소멸자 호출을 유도한다 
+            - 선언 
+                ```C++
+                #include <iostream>
+                using namespace std;
+
+                class CTest {
+                private:
+                    int num;
+                public:
+                    CTest(int anum) : num(anum) { cout << num << " CTest consturctor" << endl; }
+                    virtual ~CTest() { cout << num << " CTest destructor" << endl; }		// 가상 소멸자 - 앞에다가 virtual을 넣어 메모리 누수를 막을수있다
+                    virtual void Vfunc() { cout << "CTest virtual function()" << endl; }
+                    void func() { cout << "CTest function()" << endl; }
+                };
+                class CTestSub :public CTest {
+                private:
+                    int subN;
+                public:
+                    CTestSub(int an1, int an2) : CTest(an1), subN(an2) { cout << subN << " CTestSub cnostructor" << endl; }
+                    ~CTestSub() { cout << subN << " CTestSub destructor" << endl; }
+                    void Vfunc() { cout << "CTestSub function() override" << endl; }
+                };
+
+                int main()
+                {
+
+                    CTest obj(1);
+                    cout << "=======================================" << endl;
+                    CTestSub obj2(2, 22);
+                    cout << "=======================================" << endl;
+                    obj.func();
+                    obj.Vfunc();
+                    cout << "=======================================" << endl;
+                    obj2.func();			// 자식 클래스의 함수가 없으면 부모클래스의 func()함수를 물려받아서 출력하고 
+                    obj2.Vfunc();			
+                    cout << "=======================================" << endl;
+
+                    CTest* ptr = new CTestSub(3, 33);		// 객체 동적할당시 생성은 이루어지지만 삭제가 이루어지지않음 (제대로 삭제가 안됨 문제 발생) - 메모리 누수
+                                                            // 메모리 누수가 발생시 삭제 메개변수앞에 virtual을 넣는다
+                    delete ptr;
+
+                    return 0;
+                }
+                ```
+            
+        - static_cast.cpp부터하기 
+## 6일차 
 
 
 
