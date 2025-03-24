@@ -27,7 +27,7 @@
 //		studentID = astudentID;
 //	}
 //	void showStudnet() {
-//		cout << "이름: " << name << ", 나이: " << age;
+//		cout << "이름: " << name << ", 나이: " << age;		// 원래는 private로 싸져있으면 불가능
 //		cout << "학번: " << studentID << endl;
 //	}
 //};

@@ -138,6 +138,7 @@
     <ClCompile Include="objPointer5.cpp" />
     <ClCompile Include="objPointer6.cpp" />
     <ClCompile Include="static_cast2.cpp" />
+    <ClCompile Include="test.cpp" />
     <ClCompile Include="virtual.cpp" />
     <ClCompile Include="virtual2.cpp" />
     <ClCompile Include="virtual3.cpp" />

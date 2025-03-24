@@ -668,7 +668,7 @@
     - 접근 제어자를 private로 설정하면 자식클래스에서 호출해서 사용이 불가능하지만 [C++](./Day5/inheritance2.cpp)
         prorected를 사용하면 자식 클래스에서도 호출이 가능하다.
     - 상속관계에서는 이니셜라이즈를 사용하는게 좋다 [C++](./Day5/inheritance3.cpp)
-        - 선언 
+        - 선언 : `class 기본클래스(부모클래스) : 접근지시자 파생클래스 (자식클래스){}`
         ```C++
         public:
         Car(int ag) : gasolineGaug(ag) {}		// 콜론초기화(이니셜라이즈) gasolineGaug(ag)는 ag로 초기화한다 
@@ -814,8 +814,40 @@
                     return 0;
                 }
                 ```
-            
-        - static_cast.cpp부터하기 
+    - 스테틱  
+        - static_cast의 기본 자료형 
+        - `static_cast<type-id>` 으로 선언 : 기본 자료형의 형변환으로 컴파일 타임에 타입을 변환 
+            ```C++
+            #include <iostream>
+
+            int main()
+            {
+                char ch;
+                int i = 100;
+                float f = 3.14;
+                double d = 2.345;
+
+                ch = static_cast<char>(i);				//int -->> char 변환 / 정수의 해당하는 i인 100이 아스키코드의 문자로 변경되면 'd'가 나온다 
+                std::cout << ch << std::endl;
+                ch = (char)i;							// C언어 스타일
+                std::cout << ch << std::endl;
+
+
+                d = static_cast<double>(f);				// float타입의 f인 3.14를 double타입으로 변경함
+                std::cout << d << std::endl;
+
+                i = static_cast<int>(d);
+                std::cout << i << std::endl;			// 3이 나온다 자기보다 높은 값이 나오면 뒤는 안나온다 
+
+                std::cout<< typeid(ch).name() << std::endl;		// 타입을 알고 싶을때 ch의 타입이 뭐냐 
+                std::cout << typeid(d).name() << std::endl;
+
+                return 0;
+            }
+            ```
+    - static_cast 업,다운 캐스팅 [C++](./Day5/static_cast2.cpp)       
+    - 업캐스팅:  부모클래스 포인터로 자식클래스 객체를 가리키는 것  
+    - 다운캐스팅: 자식클래스 객체가 부모클래스를 가리키지는 못하나 동일한 타입의 포인터가 동일한 타입을 가리키는 것
 ## 6일차 
 
 
