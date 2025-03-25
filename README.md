@@ -695,6 +695,7 @@
 
 - 가상클래스 virtual function [C++](./Day5/virtual.cpp)
     - 메서드 작성시에 작성함 
+    - virtual을 사용하면 포인터 타입에 따른 함수가 아니라 저장한 객체의 함수를 호출하도록 할 수있는 것
     - virtual이라는 키워드가 있으면 가상에만 존재하고 상속되어있는 값을 넘어간다.
     - 파생클래스에서 재정의할 것을 약속받은 멤버함수를 말하며 Base 클래스의 멤버 함수에 virtual 키워드를 사용하여 만든다.
     - 객체 포인터의 다형성으로 기초 클래스 타입의 포인터로 파생 클래스의 객체를 가리키면 접근은 기초 클래스 멤버로 제한된다.
@@ -815,7 +816,9 @@
                 }
                 ```
     - 스테틱  
-        - static_cast의 기본 자료형 
+        - static_cast은 기본적으로 형변환을 하기위해 사용함 
+        - 또한 업캐스팅과 다운캐스팅으로 부모자식간의 상속을 좀더 원활하게 하기위해서다.
+
         - `static_cast<type-id>` 으로 선언 : 기본 자료형의 형변환으로 컴파일 타임에 타입을 변환 
             ```C++
             #include <iostream>
@@ -846,13 +849,329 @@
             }
             ```
     - static_cast 업,다운 캐스팅 [C++](./Day5/static_cast2.cpp)       
-    - 업캐스팅:  부모클래스 포인터로 자식클래스 객체를 가리키는 것  
-    - 다운캐스팅: 자식클래스 객체가 부모클래스를 가리키지는 못하나 동일한 타입의 포인터가 동일한 타입을 가리키는 것
-## 6일차 
+    - 업캐스팅:  부모클래스 포인터로 자식클래스 객체를 가리키는 것 (일반적으로 가능) ex) `부모클래스-> 자식클래스` 이건 가능 
+    - 다운캐스팅: 자식클래스 객체가 부모클래스를 가리키지는 못하나 동일한 타입의 포인터가 동일한 타입을 가리키는 것 ex)`자식클래스 -> 부모클래스` 이건 불가능
 
 
+### 6일차
 
-    
+- dynamic_cast [C++](./Day6/dynamic.cpp)
+    - 기봄클래스를 참조하는 lvalue를 파생된 클래스에 대한 참조로 변환
+    - 상속관계에서 안전하게 형변환을 지원한다. 업캐스팅
+    - 다운캐스팅의경우는 다형성을 위해서 virtual 메서드가 꼭있어야한다
+    - dynamic_cast은 static_cast이랑 같은 내용이지만 static보다 좀더 안정적으로 변환이 가능하다
+        - dynamic의 다운캐스팅의 경우 가상함수가 있어야한다 
+- const_cast [C++](./Day6/const_cast.cpp)
+    - const 선언을 해제한다.
+    - const_cast를 선언하여 const는 상수화시킨 값을 해지한다
+    - class로 const를 가리킬때 
+        - 선언 
+            ```C++
+            #include <iostream>
+            using namespace std;
+
+            class MyClass {
+            private:
+                int num;
+            public:
+                void setNum(int n) { num = n; }
+                void printf()const {
+                    cout << "Befoer: " << num;
+                    //num++;						// const 메서드로 이루어진 메서드여서 못씀
+                    const_cast<MyClass*>(this)->num--; //const_cast 키워드는 const를 해제시켜서 포인터로 접근해서 값을 감소시킴
+                    cout << " after: " << num <<endl;
+                }
+            };
+
+            int main()
+            {
+                MyClass obj;
+                obj.setNum(10);
+                obj.printf();
+
+                return 0;
+            }
+            ```
+- reinterpret_cast [C++](./Day6/reinterpret.cpp)
+    - 포인터-> 포인터, 포인터를 -> 변수, 변수-> 포인터로 변환함. 주로 포인터 관련 연산자.
+        - 선언 
+            ```C++
+            int main()
+            {
+                int* ip = new int{ 10 };
+                long lg = reinterpret_cast<long>(ip);				// int* --> long
+                unsigned int ui = reinterpret_cast<int>(ip);		// int* --> uint 
+                printf("ip: %u, lg: %u, ui: %u\n", ip, lg, ui);
+
+                //int* p = reinterpret_cast<int*>(lg);			//long-->int* 다운캐스팅은 64비트에서는 안됨
+                int* p1 = reinterpret_cast<int*>(ui);			// 위에있는 64비트를 84로 바꾸면 가능 문법사으이 오류는 없는음 버전이 넘어가면 바뀐거라 문제는 없음
+                printf("p: %d\n",*p1);				
+
+                int* p = new int{ 100 };
+                char* pc = reinterpret_cast<char*>(p);
+                printf("c: %c\n", *pc);					// int* --> char*
+
+                //delete p;
+
+                int* p2 = reinterpret_cast<int*>(pc);	// char* -->int*
+                printf("p: %d\n", *p);
+
+                return 0;
+            }
+            ```
+    - tempobj 
+        - 임시객체 [C++](./Day6/tempobj.cpp)
+            - 임시객체는 이름이 없는 객체다.
+            - 변경이나 명시하지 않으면 바로 다음행에서 사라진다.
+            - 또한 임시객체는 참조를 사용할 수 없다.
+                - 선언
+                    ```C++
+                    int main()
+                    {	
+                        MyClass obj{ 10 };                  // 기본적인 객체 선언 /MyClass 라는 타입의 obj객체를 10으로 지정한다 라는 뜻
+                        MyClass obj2 = MyClass{ 20 };		// MyClass{ 20 }은 이름(객체)없는 임시객체를 복사해서 저장한다는 뜻임
+                        MyClass{ 30 };						// MyClass{ 30 }은 30이라는 임시객체
+                                                            // 이름없는 객체는 변경하거나 명시하지 않으면 바로 다음행이 실행되거나 바로다음행으로 넘어가면 삭제됨
+                        cout << "bye~~" << std::endl;
+
+                        return 0;
+                    }
+
+                    ```
+        - 임시객체 참조 불가능 [C++](./Day6/tempobj2.cpp)
+            - 선언 
+                ```C++
+                int main()
+                {
+                    //MyClass* ptr = &MyClass{ 10 };
+                    //MyClass& obj2 = MyClass{ 20 };			// 애는 참조가 안된다 /임시객체는 참조를 사용할 수 없다.
+
+                    MyClass obj = MyClass{ 10 };				// 임시객체주소를 바로 참조해서 사용해서 삭제는 바로 삭제는 안된다 
+                    obj.setData(20);							// 일이 다끝나고 20이라는 값을 삭제한다.
+
+                    MyClass&& obj2 = MyClass{ 20 };			// &&는 rvalue를 참조한다는 소리
+                    obj2.setData(22);						//
+
+                    const MyClass obj3 = MyClass{ 30 };     
+                    //obj3.setData(33);						// 상수참조를 하므로 값변경은 불허한다. 그래서 setData가 안됨
+
+                    cout << "Bye~~" << endl;				// 임시객체를 변경하거나 참조했기때문에 바로 삭제 되지않고 일이 다 끝난후에 삭제된다.
+                    
+                    return 0;
+                }
+                ```
+        - 임시객체 copy는 그냥 보면될듯? [C++](./Day6/tempobj3.cpp)
+
+    - 스마트포인터 : unique_prt [C++](./Day6/unique_prt.cpp)
+        - 객체의 생명주기를 객체에 맡김으로 프로그래머와의 메모리 관리 부담을 줄여준다 
+        - 스마트 포인터를 메모리를 동적으로 할당되어있는 값을 자동으로 해지시켜준다
+            - 선언 
+                ```C++
+                #include <iostream>
+                using namespace std;
+
+                class MyClass {
+                public:
+                    MyClass() { cout << "MyClass() 호출" << endl; }
+                    ~MyClass() { cout << "~MyClass() 호출" << endl; }
+                };
+                int main()
+                {
+                    unique_ptr<MyClass> ptr(new MyClass{});	//스마트 포인터 선언 cast선언자와 비슷한 구조로 선언 /unique_ptr<MyClass>키워드를 선언하면 동적할당인 new를 선언후에 해제를 하지 않아도된다.
+                    unique_ptr<MyClass> ptr2= move(ptr);
+
+                    return 0;
+                }
+                ```
+    - 객체 공유
+        - make_shared와 shared_ptr [C++](./Day6/shared_ptr.cpp)
+            - make_shared: 객체와 참조 카운트를 하나의 메모리블록에 같이 할당시킨다. shared_ptr을 생성하는 함수다 
+            - shared_ptr: 참조 카운트를 통해 객체 의 소유권을 공유한다. 여러개의 shared_ptr이 객체를 참조할수 있으며 레퍼런스 카운트가 0이되면 메모리가 자동해제 된다.
+        - weak_ptr [C++](./Day6/weak_ptr.cpp)
+            - 레퍼런스(&) 카운트에 영향을 주지않는 스마트 포인터
+        - weak_ptr의 순환참조 [C++](./Day6/weak_ptr2.cpp)
+            - 두개의 객체가 서로를 참조하고 둘가 shared_ptr을 사용하여 참조를 유지하는 경우에 발생이경우에는 서로가 서로를 참조하여
+                0이되지 거나 끝나지 않아 메모리 누수가 발생한다
+            - 두개중의 하나의 shared_ptr를 weak_ptr로 바꿔주면 순환 참조가 발생하지 않는다 
+                - 선언
+                    ```C++
+                    #include <iostream>
+
+                    struct B;
+                    struct A {
+                        std::shared_ptr<B> b_ptr;
+                    };
+                    struct B {
+                        //std::shared_ptr<A> a_ptr;		// 이래쓰면 객체가 소멸되지 않고 계속돈다 
+                        std::weak_ptr<A> a_ptr;		//weak_ptr 를 쓰면 순환참조가 끊어진다 
+                    };
+                    int main()
+                    {
+                        std::shared_ptr<A> a(new A());
+                        std::shared_ptr<B> b(new B());
+
+                        a->b_ptr = b;			// 순환참조
+                        b->a_ptr = a;
+
+                        return 0;
+                    }
+                    ```
+    - 스텐다르 표준탬플릿 은 보다 더 C++을 사용하기 쉽게 하는 템플릿이다.
+    - 탬플릿이라고 말하면 다형성이 먼저 나와야한다. 
+    - STL(Standard Template Library)
+        - container : 객체를 저장하고 관리하는 자료구조 
+            - conrainer(컨테이너) 종류
+                1. 시퀀스 컨테이너 - 선형적으로 데이터를 저장(순서)
+                    대표적인거: vector,list,queue ex) 배열, 리스트
+                2. 연관 컨테이너 - 일정한 규칙으로 저장 
+                    대표적인거: set,multiset,map, multimap ex) 키,벨류
+                3. 컨테이너 어댑터(참고만하자) - 변형
+            
+
+            - vector : 다루기 쉬운 배열 
+            for (auto i : v3 ) // 범위기반 for문 / v백터 v3의 값을 auto i의 값에 다가 저장한다 하는 뜻
+            - [C++](./STL/vector.cpp)
+                vector.size(): 원소 크기(갯수)를 반환 
+                vector.begin(): 첫번째의 주소를 반환한다
+                vector.end(): 마지막 주소의 다음주소를 반환한다
+
+            - [C++](./STL/vector2.cpp)
+                v.push_back(10): 마지막 원소 뒤에 10을 추가한다.
+                v.insert(idx, val): idx번쨰 위치에 val을 넣는다.
+                v.capacity(): 벡터에 할당된 메모리 크리를 리턴한다. - v.size()
+                v.pop_back(): 마지막 원소제거 
+
+                
+            - vector container 출력 [C++](./STL/vector3.cpp)
+
+                ```C++
+
+
+                /* 출력 1 */
+                for (auto i = 0; i < v.size(); i++) {
+                    cout << v[i] << endl;
+                    cout << v.at(i) << endl;	// at이라는 메서드를 호출하는 법. 함수호출처럼 가능/ 이게 좀더 안전하지만 느림
+                }
+                cout << endl<< endl; 
+
+                /* 출력 2 */
+                for (vector<int>::size_type i = 0; i < v.size(); i++) {  //벡러 라이브러리에있는 인트에 싸이즈타입 i를 쓴다
+                    cout << v[i] << endl;
+                }
+                cout << endl << endl;
+
+                /* 출력 3 */
+                vector<int>::iterator iter;		// interator 반복자를 사용해서 출력
+                for (iter = v.begin(); iter != v.end(); iter++) {
+                    cout << *iter << endl;
+                }
+                cout << endl << endl;
+                /* 출력 4 */
+                for (auto i : v) {			// 인텍스 값출력 못하는거 빼면 편함
+                    cout << i << endl;
+                }
+                ```
+        
+        - vector coniner - 삽입, 삭제, 참조 
+            - 선언 
+                ```C++
+                void main()
+                {
+                    vector<string> v;
+                    list<int> li;
+
+
+                    v.push_back("tiger");
+                    v.push_back("lionl");
+                    v.push_back("웅나나");
+                    v.push_back("방부웅나");
+                    v.push_back("horse");
+
+                    cout << "v.front(): " << v.front() << endl;		// front()는 맨첫번쨰 원소를 참조한다
+                    cout << "v.back(): " << v.back() << endl;		// back()는 마지막 원소 출력
+                    cout << "v.capacity: " << v.capacity() << endl;
+                    cout << endl;
+
+                    vector<string>::iterator iter;				//vector<템플릿>::iterator iter 템플릿만 바꾸면 다른 값도 적용가능하다.
+                    for (iter = v.begin(); iter != v.end(); iter++) {
+                        cout << *iter << "/";
+                    }
+                    cout << endl;
+                    v.pop_back();				// 마지막꺼 삭제 
+                    for (iter = v.begin(); iter != v.end(); iter++) {
+                        cout << *iter << "/";
+                    }
+                    cout << endl;
+
+                    for (iter = v.begin(); iter != v.end(); iter++) {
+                        if (*iter == "웅나나") {
+                            v.erase(iter); break;			//erase은 조건이 맞으면 삭제 
+                        }
+                    }
+                    cout << endl;
+
+                    for (iter = v.begin(); iter != v.end(); iter++) {
+                        cout << *iter << "/";
+                    }
+
+                }
+                ```
+        - vector iterator : 순방향 반복자 
+            - 선언 
+                ```C++
+                #include <iostream>
+                #include <vector>
+                using namespace std;
+
+                void main()
+                {
+                    vector<int> v = { 10, 20, 30, 40, 50 };
+
+                    vector<int>::iterator it;
+                    for (it = v.begin(); it != v.end(); it++) {
+                        cout << *it << endl;
+                    }
+                    cout << endl;
+
+                    for (auto it = v.begin(); it < v.end(); it++) {		// it는 포인터이다 자동으로 어떤형태인지 해준다
+                        cout << *it << endl;
+                    }
+                }
+                /*
+                    vector<int>::iterator iter은 순방향 반복자 선언.
+                    근데 이놈을 생략하고 auto선언해도 된다.
+                */
+                ```
+        - vector reverse_iterator: 역방향 반복자 선언
+            - 선언 
+                ```C++
+                #include <iostream>
+                #include <vector>
+                using namespace std;
+
+
+                void main()
+                {
+                    vector<int> v = { 10, 20, 30, 40, 50 };
+
+                    vector<int>::reverse_iterator rit;		// 역으로 출력된다.
+                    for (rit = v.rbegin(); rit != v.rend(); rit++) {
+                        cout << *rit << endl;
+                    }
+                    cout << endl;
+
+                    for (auto rit = v.rbegin(); rit != v.rend(); rit++) {
+                        cout << *rit << endl;
+                    }
+                }
+
+                /*
+                    vector<int>::reverse_iterator rit - 역방향 반복자 선언 
+                    이놈을 생략하고, auto로 선언해도 된다.
+                    rbegin()은 마지막 주소, rend()은 처음 원소의 이전주소
+                */
+                ```
+
 
 
 
