@@ -31,7 +31,7 @@
 //	cout << endl << endl;
 //
 //	/* 출력 3 */
-//	vector<int>::iterator iter;		// interator 반복자를 사용해서 출력
+//	vector<int>::iterator iter;		// interator 반복자를 사용해서 출력 포인터로 출력
 //	for (iter = v.begin(); iter != v.end(); iter++) {
 //		cout << *iter << endl;
 //	}
