@@ -14,7 +14,6 @@ private:
     Connection* conn; // MySQL 연결 객체
 
 public:
-    // `const char*` 대신 `const string&`을 사용하여 안정성 강화
     Message(int _msg_id, int _user_id, const string& _msg_text, const string& _msg_time, Connection* _conn)
         : msg_id(_msg_id), user_id(_user_id), msg_text(_msg_text), msg_time(_msg_time), conn(_conn) {
         if (!conn) { // `conn`이 nullptr이면 오류 발생 가능
@@ -22,15 +21,14 @@ public:
         }
     }
 
-    // 소멸자
     ~Message() {}
 
-    //  함수명 오타 수정 (`print_Maessage` → `print_Message`)
     void print_Message() {
-        cout << "msg_id: " << msg_id
+        cout << "Message Info: "
+            << "msg_id: " << msg_id
             << " | user_id: " << user_id
             << " | msg_text: " << msg_text
             << " | msg_time: " << msg_time
-            << " | conn: " << conn << endl;
+            << endl;
     }
 };

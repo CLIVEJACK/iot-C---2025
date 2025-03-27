@@ -4,24 +4,38 @@
 
 using namespace sql;
 
-#define SERVER_IP   "127.0.0.1:3306"
-#define USERNAME   "root"
-#define PASSWORD   "12345"
-#define DATABASE   "chat"
-
 int main() {
     // MySQLConnector를 사용하여 연결 생성
-    MySQLConnector db(SERVER_IP, USERNAME, PASSWORD, DATABASE);
+    MySQLConnector db;
     Connection* conn = db.getConnection();
 
     if (!conn) {
-        cerr << " Database connection failed!" << endl;
-        return 1; // 오류 종료
+        cerr << "Database connection failed!" << endl;
+        return 1;
     }
 
-    // Message 객체 생성 및 출력
-    Message print(10, 20, "ㅇㅇ", "ㅇㅇㅇ", conn);
-    print.print_Message();
+    // SQL 실행 및 예외 처리
+    try {
+        conn->setSchema(DATABASE);  // 스키마 설정을 다시 실행
+
+        string query = "SELECT msg_id, user_id, msg_text, msg_time FROM Messages LIMIT 5";
+        unique_ptr<Statement> stmt(conn->createStatement());
+        unique_ptr<ResultSet> res(stmt->executeQuery(query));
+
+        while (res->next()) {
+            int msg_id = res->getInt("msg_id");
+            int user_id = res->getInt("user_id");
+            string msg_text = res->getString("msg_text");
+            string msg_time = res->getString("msg_time");
+
+            Message msg(msg_id, user_id, msg_text, msg_time, conn);
+            msg.print_Message();
+        }
+    }
+    catch (SQLException& e) {
+        cerr << "SQL Error: " << e.what() << endl;
+        return 1;
+    }
 
     return 0;
 }

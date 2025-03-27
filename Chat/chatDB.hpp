@@ -12,33 +12,31 @@ using namespace sql;
 
 class MySQLConnector {
 private:
-    string server;
-    string username;
-    string password;
-    string database;
     unique_ptr<Connection> conn; // 스마트 포인터로 MySQL 연결 관리
 public:
-    // 생성자: MySQL에 연결
-    MySQLConnector(const string& serv, const string& user, const string& pw, const string& db)
-        : server(serv), username(user), password(pw), database(db) {
+    MySQLConnector() {
         try {
             mysql::MySQL_Driver* driver = mysql::get_mysql_driver_instance();
-            conn = unique_ptr<Connection>(driver->connect(server, username, password));
-            conn->setSchema(database);
-            cout << " MySQL Connection success!!" << endl;
+            conn = unique_ptr<Connection>(driver->connect(SERVER_IP, USERNAME, PASSWORD));
+
+            if (conn) {
+                conn->setSchema(DATABASE); // 스키마 설정
+                cout << "MySQL Connection Success!" << endl;
+            }
+            else {
+                cerr << "Connection Failed: Connection pointer is null!" << endl;
+            }
         }
         catch (SQLException& e) {
-            cerr << " MySQL Connection Failed!! Error: " << e.what() << endl;
+            cerr << "MySQL Connection Failed! Error: " << e.what() << endl;
         }
     }
 
-    // 현재 연결을 반환하는 함수
     Connection* getConnection() {
         return conn.get();
     }
 
-    // 소멸자: 연결 종료 메시지 출력
     ~MySQLConnector() {
-        cout << " MySQL Disconnect!!" << endl;
+        cout << "MySQL Disconnected!" << endl;
     }
 };
