@@ -14,26 +14,15 @@ int main() {
         return 1;
     }
 
-    // SQL 실행 및 예외 처리
     try {
-        conn->setSchema(DATABASE);  // 스키마 설정을 다시 실행
-
-        string query = "SELECT msg_id, user_id, msg_text, msg_time FROM Messages LIMIT 5";
-        unique_ptr<Statement> stmt(conn->createStatement());
-        unique_ptr<ResultSet> res(stmt->executeQuery(query));
-
-        while (res->next()) {
-            int msg_id = res->getInt("msg_id");
-            int user_id = res->getInt("user_id");
-            string msg_text = res->getString("msg_text");
-            string msg_time = res->getString("msg_time");
-
-            Message msg(msg_id, user_id, msg_text, msg_time, conn);
-            msg.print_Message();
-        }
+        conn->setSchema(DATABASE);  // DB 스키마 설정
+        Message msg(conn);  // Message 객체 생성
+        msg.print_Message();  // DB에서 메시지를 조회하여 출력
+        
+        cout << msg.countMessages() <<endl;         // 카운트 함수 출력 
     }
     catch (SQLException& e) {
-        cerr << "SQL Error: " << e.what() << endl;
+        /*cerr << "SQL Error: " << e.what() << endl;*/
         return 1;
     }
 
