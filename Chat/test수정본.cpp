@@ -1,3 +1,5 @@
+///* 출력에만 msg_id가 없는거*/
+//
 //#pragma once
 //#include <iostream>
 //#include <string>
@@ -17,37 +19,7 @@
 //        }
 //    }
 //    ~Message() {}
-//    /* 그냥 15개 위에서부터 출력하는거 */
-//    //void print_Message() {
-//    //    try {
-//    //        string query = R"(
-//    //            SELECT u.user_name, m.msg_text, m.msg_time 
-//    //            FROM Message m 
-//    //            JOIN User u ON m.user_id = u.user_id
-//    //            LIMIT 15
-//    //        )";
-//    //        unique_ptr<Statement> stmt(conn->createStatement());
-//    //        unique_ptr<ResultSet> res(stmt->executeQuery(query));
 //
-//    //        SetConsoleOutputCP(CP_UTF8);
-//
-//    //        while (res->next()) {
-//    //            string user_name = res->getString("user_name");
-//    //            string msg_text = res->getString("msg_text");
-//    //            string msg_time = res->getString("msg_time");
-//
-//    //            cout << u8"Message Info: "
-//    //                << " | user_name: " << user_name
-//    //                << " | msg_text: " << msg_text
-//    //                << " | msg_time: " << msg_time
-//    //                << endl;
-//    //        }
-//    //    }
-//    //    catch (SQLException& e) {
-//    //        cerr << "SQL Error: " << e.what() << endl;
-//    //    }
-//    //}
-//    // 
 //    //msg_id 개수를 세는 함수 추가
 //    int countMessages() {
 //        int count = 0;
@@ -68,7 +40,7 @@
 //    //여가 15개 출력하는거 
 //
 //    void print_Message() {
-//        int totalMessages = countMessages();
+//        int totalMessages = countMessages(); // 총 메시지 개수 가져오기
 //
 //        if (totalMessages == 0) {
 //            cout << "No messages found in the database." << endl;
@@ -80,19 +52,18 @@
 //            SELECT m.msg_id, u.user_name, m.msg_text, m.msg_time 
 //            FROM Message m 
 //            JOIN User u ON m.user_id = u.user_id
-//        )"; 
+//        )"; // 모든 메시지 가져오기 (정렬 없이)
 //
 //            unique_ptr<Statement> stmt(conn->createStatement());
 //            unique_ptr<ResultSet> res(stmt->executeQuery(query));
 //
-//            SetConsoleOutputCP(CP_UTF8); 
+//            SetConsoleOutputCP(CP_UTF8); // 한글 출력 지원
 //
-//            // msg_id와 메시지 데이터를 저장할 벡터
-//            vector<pair<int, string>> messages;
+//            // 메시지 데이터를 저장할 벡터
+//            vector<string> messages;
 //
-//            // 데이터를 벡터에 저장
+//            // 데이터를 벡터에 저장 (msg_id는 저장하지 않음)
 //            while (res->next()) {
-//                int msg_id = res->getInt("msg_id");
 //                string user_name = res->getString("user_name");
 //                string msg_text = res->getString("msg_text");
 //                string msg_time = res->getString("msg_time");
@@ -101,13 +72,11 @@
 //                    " | msg_text: " + msg_text +
 //                    " | msg_time: " + msg_time;
 //
-//                messages.emplace_back(msg_id, fullMessage);
+//                messages.push_back(fullMessage);
 //            }
 //
-//            // msg_id 기준 내림차순 정렬 (최신 메시지 먼저)
-//            sort(messages.begin(), messages.end(), [](const pair<int, string>& a, const pair<int, string>& b) {
-//                return a.first > b.first; // msg_id가 큰 순서대로 정렬
-//                });
+//            // 최신 메시지가 먼저 출력되도록 정렬 (벡터 순서를 뒤집음)
+//            reverse(messages.begin(), messages.end());
 //
 //            cout << "Total Messages: " << totalMessages << endl;
 //
@@ -117,7 +86,7 @@
 //                int limit = min(15, static_cast<int>(messages.size()) - offset); // 남은 메시지가 15개 이하일 수도 있음
 //
 //                for (int i = 0; i < limit; ++i) {
-//                    cout << "Message Info: msg_id: " << messages[offset + i].first << messages[offset + i].second << endl;
+//                    cout << "Message Info: " << messages[offset + i] << endl;
 //                }
 //
 //                offset += 15; // 다음 15개 출력 준비
@@ -131,5 +100,6 @@
 //            cerr << "SQL Error: " << e.what() << endl;
 //        }
 //    }
+//
 //
 //};

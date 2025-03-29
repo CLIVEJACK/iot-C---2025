@@ -27,6 +27,21 @@
     <ClInclude Include="test2.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="test1_1.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="그냥만들어본test.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="일test1.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="금testbas.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="일testDB건드리는거.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,7 +56,13 @@
     <ClCompile Include="test1_.hpp">
       <Filter>헤더 파일</Filter>
     </ClCompile>
-    <ClCompile Include="tes1_vector.cpp">
+    <ClCompile Include="tes1_vector.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="일testbaes.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="test수정본.cpp">
       <Filter>헤더 파일</Filter>
     </ClCompile>
   </ItemGroup>

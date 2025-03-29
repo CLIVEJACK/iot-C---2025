@@ -17,9 +17,8 @@ int main() {
     try {
         conn->setSchema(DATABASE);  // DB 스키마 설정
         Message msg(conn);  // Message 객체 생성
-        msg.fetchAllMessages();  // 백터로 정렬> DB에서 전체조회후
 
-        msg.printMessagesPaginated();   // 15개씩 최신부터 출력 
+        msg.print_Message();   // 15개씩 최신부터 출력 
     }
     catch (SQLException& e) {
         /*cerr << "SQL Error: " << e.what() << endl;*/

@@ -135,14 +135,21 @@
     <ClInclude Include="chatDB.hpp" />
     <ClInclude Include="chatDB2.hpp" />
     <ClInclude Include="test.hpp" />
+    <ClInclude Include="test1_1.hpp" />
     <ClInclude Include="test2.hpp" />
+    <ClInclude Include="그냥만들어본test.hpp" />
+    <ClInclude Include="금testbas.hpp" />
+    <ClInclude Include="일test1.hpp" />
+    <ClInclude Include="일testDB건드리는거.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main2.cpp" />
-    <ClCompile Include="tes1_vector.cpp" />
+    <ClCompile Include="tes1_vector.hpp" />
     <ClCompile Include="test1_.hpp" />
     <ClCompile Include="test3.hpp" />
+    <ClCompile Include="test수정본.cpp" />
+    <ClCompile Include="일testbaes.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
