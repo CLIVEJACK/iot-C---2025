@@ -68,7 +68,7 @@ public:
     //여가 15개 출력하는거 
 
     void print_Message() {
-        int totalMessages = countMessages();
+        int totalMessages = countMessages(); // 총 메시지 개수 가져오기
 
         if (totalMessages == 0) {
             cout << "No messages found in the database." << endl;
@@ -88,8 +88,8 @@ public:
             SetConsoleOutputCP(CP_UTF8);
 
             // msg_id와 메시지 데이터를 저장할 벡터
-            vector<pair<int, string>> messages;
-
+            vector<pair<int, string>> messages;     //벡터(messages)에 msg_id와 메시지 데이터를 저장
+                                                    //pair<int, string>을 사용하여 msg_id와 메시지 내용을 함께 저장
             // 데이터를 벡터에 저장
             while (res->next()) {
                 int msg_id = res->getInt("msg_id");
@@ -98,8 +98,8 @@ public:
                 string msg_time = res->getString("msg_time");
 
                 string fullMessage = " | user_name: " + user_name +
-                    " | msg_text: " + msg_text +
-                    " | msg_time: " + msg_time;
+                                     " | msg_text: " + msg_text +
+                                     " | msg_time: " + msg_time;
 
                 messages.emplace_back(msg_id, fullMessage);
             }
@@ -114,7 +114,7 @@ public:
             // 15개씩 출력
             int offset = 0;
             while (offset < messages.size()) {
-                int limit = min(15, static_cast<int>(messages.size()) - offset); // 남은 메시지가 15개 이하일 수도 있음
+                int limit = min(15, static_cast<int>(messages.size()) - offset); // 남은 메시지 
 
                 for (int i = 0; i < limit; ++i) {
                     cout << "Message Info: msg_id: " << messages[offset + i].first << messages[offset + i].second << endl;
