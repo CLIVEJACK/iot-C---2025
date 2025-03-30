@@ -65,5 +65,11 @@
     <ClCompile Include="test수정본.cpp">
       <Filter>헤더 파일</Filter>
     </ClCompile>
+    <ClCompile Include="일요일 모작 test.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DB쿼리문건드린거.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -143,6 +143,7 @@
     <ClInclude Include="일testDB건드리는거.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DB쿼리문건드린거.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main2.cpp" />
     <ClCompile Include="tes1_vector.hpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="test3.hpp" />
     <ClCompile Include="test수정본.cpp" />
     <ClCompile Include="일testbaes.hpp" />
+    <ClCompile Include="일요일 모작 test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
