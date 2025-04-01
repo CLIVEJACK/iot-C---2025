@@ -1,10 +1,15 @@
+///* API 연동만 가능하고 밑에있는 print_Message의 함수는 출력 안됨*/
+//
 //#pragma once
 //#include <iostream>
 //#include <string>
 //#include <windows.h> // 한글깨짐 방지
-//#include "chatDB.hpp"  // MySQLConnector 클래스를 포함하는 헤더
+//#include "DB.hpp"  // MySQLConnector 클래스를 포함하는 헤더
+//#include "httplib.h"
+//#include "json.hpp"
 //
 //using namespace std;
+//using json = nlohmann::json;
 //
 //class Message {
 //private:
@@ -17,38 +22,50 @@
 //        }
 //    }
 //    ~Message() {}
-//    /* 그냥 15개 위에서부터 출력하는거 */
-//    //void print_Message() {
-//    //    try {
-//    //        string query = R"(
-//    //            SELECT u.user_name, m.msg_text, m.msg_time 
-//    //            FROM Message m 
-//    //            JOIN User u ON m.user_id = u.user_id
-//    //            LIMIT 15
-//    //        )";
-//    //        unique_ptr<Statement> stmt(conn->createStatement());
-//    //        unique_ptr<ResultSet> res(stmt->executeQuery(query));
 //
-//    //        SetConsoleOutputCP(CP_UTF8); // 한글 출력 지원
+//    json getMessagesJson() {
+//        json result_json = json::array();
 //
-//    //        while (res->next()) {
-//    //            string user_name = res->getString("user_name");
-//    //            string msg_text = res->getString("msg_text");
-//    //            string msg_time = res->getString("msg_time");
+//        try {
+//            string query = R"(
+//                SELECT m.msg_id, u.user_name, m.msg_text, m.msg_time 
+//                FROM Message m 
+//                JOIN User u ON m.user_id = u.user_id
+//                ORDER BY m.msg_id DESC 
+//                LIMIT 15
+//            )";
 //
-//    //            cout << u8"Message Info: "
-//    //                << " | user_name: " << user_name
-//    //                << " | msg_text: " << msg_text
-//    //                << " | msg_time: " << msg_time
-//    //                << endl;
-//    //        }
-//    //    }
-//    //    catch (SQLException& e) {
-//    //        cerr << "SQL Error: " << e.what() << endl;
-//    //    }
-//    //}
-//     
-//    //msg_id 개수를 세는 함수 추가
+//            unique_ptr<Statement> stmt(conn->createStatement());
+//            unique_ptr<ResultSet> res(stmt->executeQuery(query));
+//
+//            while (res->next()) {
+//                json msg;
+//                msg["msg_id"] = res->getInt("msg_id");
+//                msg["user_name"] = res->getString("user_name");
+//                msg["msg_text"] = res->getString("msg_text");
+//                msg["msg_time"] = res->getString("msg_time");
+//
+//                result_json.push_back(msg);
+//            }
+//        }
+//        catch (const SQLException& e) {
+//            cout << "Query failed: " << e.what() << endl;
+//        }
+//
+//        return result_json;
+//    }
+//
+//    // GET 요청을 처리하여 JSON 응답 반환
+//    void handleMessages(const httplib::Request& req, httplib::Response& res) {
+//        try {
+//            json messages = getMessagesJson();  // 메시지 데이터 조회
+//            res.set_content(messages.dump(), "application/json");  // JSON 응답 반환
+//        }
+//        catch (const SQLException& e) {
+//            cout << "Query failed: " << e.what() << endl;
+//        }
+//    }
+//    // 메시지 개수 반환
 //    int countMessages() {
 //        int count = 0;
 //        try {
@@ -65,6 +82,7 @@
 //        }
 //        return count;
 //    }
+//
 //    //여가 15개 출력하는거 
 //
 //    void print_Message() {
@@ -79,7 +97,7 @@
 //            string query = R"(
 //            SELECT m.msg_id, u.user_name, m.msg_text, m.msg_time 
 //            FROM Message m 
-//            JOIN User u ON m.user_id = u.user_id
+//            JOIN User u ON m.user_id = u.user_id 
 //        )";
 //            unique_ptr<Statement> stmt(conn->createStatement());
 //            unique_ptr<ResultSet> res(stmt->executeQuery(query));
@@ -143,6 +161,5 @@
 //            cerr << "SQL Error: " << e.what() << endl;
 //        }
 //    }
-//
 //
 //};

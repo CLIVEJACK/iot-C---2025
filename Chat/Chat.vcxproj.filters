@@ -74,5 +74,29 @@
     <ClCompile Include="15개 출력은가능한데 나머지는도 역순으로 바꿔버림.hpp">
       <Filter>헤더 파일</Filter>
     </ClCompile>
+    <ClCompile Include="화요일 API 출력 완성전.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="화요일 API연동후 출력 msg_id가 출력됨.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="화요일 최종본.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="login.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="login_find.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="main_login_find.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="login_find_fin.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="main_login_find_fin.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

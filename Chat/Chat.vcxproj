@@ -145,14 +145,22 @@
   <ItemGroup>
     <ClCompile Include="15개 출력은가능한데 나머지는도 역순으로 바꿔버림.hpp" />
     <ClCompile Include="DB쿼리문건드린거.cpp" />
+    <ClCompile Include="login.hpp" />
+    <ClCompile Include="login_find.hpp" />
+    <ClCompile Include="login_find_fin.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main2.cpp" />
+    <ClCompile Include="main_login_find.cpp" />
+    <ClCompile Include="main_login_find_fin.cpp" />
     <ClCompile Include="tes1_vector.hpp" />
     <ClCompile Include="test1_.hpp" />
     <ClCompile Include="test3.hpp" />
     <ClCompile Include="test수정본.cpp" />
     <ClCompile Include="일testbaes.hpp" />
     <ClCompile Include="일요일 모작 test.cpp" />
+    <ClCompile Include="화요일 API 출력 완성전.hpp" />
+    <ClCompile Include="화요일 API연동후 출력 msg_id가 출력됨.hpp" />
+    <ClCompile Include="화요일 최종본.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

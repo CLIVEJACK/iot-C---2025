@@ -1,6 +1,8 @@
 #include <iostream>
-#include "test.hpp"   // Message 클래스 포함
-#include "chatDB.hpp" // MySQLConnector 클래스 포함
+#include"login.hpp"   
+#include "chatDB.hpp" 
+#include <windows.h>
+
 
 using namespace sql;
 
@@ -15,13 +17,14 @@ int main() {
     }
 
     try {
-        conn->setSchema(DATABASE);  // DB 스키마 설정
-        Message msg(conn);  // Message 객체 생성
+        conn->setSchema(DATABASE);  
 
-        msg.print_Message();   // 15개씩 최신부터 출력 
+        Login loginHandler(conn);  
+
+        loginHandler.Login_find();  
     }
     catch (SQLException& e) {
-        /*cerr << "SQL Error: " << e.what() << endl;*/
+        cerr << "SQL Error: " << e.what() << endl;
         return 1;
     }
 
