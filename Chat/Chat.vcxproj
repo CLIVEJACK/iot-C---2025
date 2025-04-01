@@ -143,6 +143,7 @@
     <ClInclude Include="일testDB건드리는거.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="15개 출력은가능한데 나머지는도 역순으로 바꿔버림.hpp" />
     <ClCompile Include="DB쿼리문건드린거.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main2.cpp" />

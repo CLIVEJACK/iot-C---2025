@@ -74,24 +74,20 @@ public:
             cout << "No messages found in the database." << endl;
             return;
         }
-        // DB에서 메시지 가져오는거 
+
         try {
             string query = R"(
             SELECT m.msg_id, u.user_name, m.msg_text, m.msg_time 
             FROM Message m 
             JOIN User u ON m.user_id = u.user_id
         )";
-            // 쿼리 실행 후 저장
             unique_ptr<Statement> stmt(conn->createStatement());
             unique_ptr<ResultSet> res(stmt->executeQuery(query));
 
             SetConsoleOutputCP(CP_UTF8);
 
-            // msg_id와 메시지 데이터를 저장할 벡터
-            vector<pair<int, string>> messages;     //벡터(messages)에 msg_id와 메시지 데이터를 저장
-                                                    //pair<int, string>을 사용하여 msg_id와 메시지 내용을 함께 저장
-                                                    // pair라는 문을 써서 first(msg_id)는 정렬 기준 second(메시지)는 출력할 메시지를 저장하기 위해씀 
-            // 데이터를 벡터에 저장
+            vector<pair<int, string>> messages;
+
             while (res->next()) {
                 int msg_id = res->getInt("msg_id");
                 string user_name = res->getString("user_name");
@@ -99,32 +95,47 @@ public:
                 string msg_time = res->getString("msg_time");
 
                 string fullMessage = " | user_name: " + user_name +
-                                     " | msg_text: " + msg_text +
-                                     " | msg_time: " + msg_time;
+                    " | msg_text: " + msg_text +
+                    " | msg_time: " + msg_time;
 
-                messages.emplace_back(msg_id, fullMessage);     // 마지막 원소 뒤에 추가
+                messages.emplace_back(msg_id, fullMessage);
             }
 
-            // msg_id 기준 내림차순 정렬 (최신 메시지 먼저)
-            sort(messages.begin(), messages.end(), [](const pair<int, string>& a, const pair<int, string>& b) {// 람다 함수로 정의
-                return a.first > b.first; // msg_id가 큰 순서대로 정렬
+            // 최신 메시지 15개 내림차순 정렬
+            sort(messages.begin(), messages.end(), [](const pair<int, string>& a, const pair<int, string>& b) {
+                return a.first > b.first; // msg_id가 큰 순서대로 정렬 (내림차순)
                 });
 
-            cout << "Total Messages: " << totalMessages << endl;        // msg_id 갯수 출력
+            cout << "Total Messages: " << totalMessages << endl;
 
-            // 15개씩 출력
-            int offset = 0;
-            while (offset < messages.size()) {
-                int limit = min(15, static_cast<int>(messages.size()) - offset); // 남은 메시지 
+            // 첫 15개 내림차순 출력 (msg_id 제외)
+            int firstBatch = min(15, static_cast<int>(messages.size()));
+            for (int i = 0; i < firstBatch; ++i) {
+                cout << "Message Info:" << messages[i].second << endl;
+            }
 
-                for (int i = 0; i < limit; ++i) {
-                    cout << "Message Info: msg_id: " << messages[offset + i].first << messages[offset + i].second << endl;
-                }
+            if (messages.size() > 15) {
+                cout << "---------------------- Remaining messages in ascending order ----------------------" << endl;
 
-                offset += 15; // 다음 15개 출력 준비
+                // 남은 메시지 오름차순 정렬
+                sort(messages.begin() + 15, messages.end(), [](const pair<int, string>& a, const pair<int, string>& b) {
+                    return a.first < b.first; // msg_id가 작은 순서대로 정렬 (오름차순)
+                    });
 
-                if (offset < messages.size()) {
-                    cout << "---------------------- Next 15 messages ----------------------" << endl;
+                // 15개씩 출력 (msg_id 제외)
+                int offset = 15;
+                while (offset < messages.size()) {
+                    int limit = min(15, static_cast<int>(messages.size()) - offset);
+
+                    for (int i = 0; i < limit; ++i) {
+                        cout << "Message Info:" << messages[offset + i].second << endl;
+                    }
+
+                    offset += 15;
+
+                    if (offset < messages.size()) {
+                        cout << "---------------------- Next 15 messages ----------------------" << endl;
+                    }
                 }
             }
         }
@@ -132,5 +143,6 @@ public:
             cerr << "SQL Error: " << e.what() << endl;
         }
     }
+
 
 };

@@ -55,6 +55,17 @@
 //			SetConsoleOutputCP(CP_UTF8);
 //
 //			vector<pair<int, string>> messages;
+//
+//			while(res-> next()){
+//				int msg_id = res->getInt(msg_id);
+//				string user_name = res->getString("user_name");
+//				string user_text = res->getString("msg_text");
+//				string user_name = res->getString("msg_time");
+//
+//				string fullMessage = "| user_name: " + user_name +
+//									 "| msg_text: " + msg_ +
+//
+//
 //		}
 //
 //};

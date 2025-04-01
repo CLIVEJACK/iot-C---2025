@@ -41,25 +41,3 @@ public:
         cout << "MySQL Disconnected!" << endl;
     }
 };
-
-
-/* 테스트용 */
-//class test {
-//public:
-//    int msg_id;
-//    int user_id;
-//    string msg_text;
-//    string msg_time;
-//    Connection* conn;
-//
-//    test(int _msg_id, int _user_id, string _msg_text, string _msg_time, Connection* _conn)
-//        :msg_id(_msg_id), user_id(_user_id), msg_text(_msg_text),msg_time(_msg_time), conn(_conn){ }
-//    
-//    ~test(){}
-//    void printms() {
-//        cout << "msg_id" << msg_id
-//            << "user_id: "<< user_id
-//            << "msg_text: "<< msg_text
-//            << "msg_time: "<< msg_time<<endl;
-//    }
-//};

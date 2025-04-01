@@ -71,5 +71,8 @@
     <ClCompile Include="DB쿼리문건드린거.cpp">
       <Filter>헤더 파일</Filter>
     </ClCompile>
+    <ClCompile Include="15개 출력은가능한데 나머지는도 역순으로 바꿔버림.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
