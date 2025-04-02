@@ -141,6 +141,7 @@
     <ClInclude Include="금testbas.hpp" />
     <ClInclude Include="일test1.hpp" />
     <ClInclude Include="일testDB건드리는거.hpp" />
+    <ClInclude Include="최종찐막.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="15개 출력은가능한데 나머지는도 역순으로 바꿔버림.hpp" />

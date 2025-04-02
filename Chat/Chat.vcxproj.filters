@@ -42,6 +42,9 @@
     <ClInclude Include="일testDB건드리는거.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="최종찐막.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

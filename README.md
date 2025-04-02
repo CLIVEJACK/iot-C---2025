@@ -1174,6 +1174,83 @@
                 */
                 ```
 
+## 미니프로젝트 
+
+### 깃허브 엑션(Github Action)
+    - 이건 Workflow를 자동화 할 수 있도록 도와주는 도구 
+
+    - Workfolw의 대표적인 예 
+        1. Test Code 
+            - ex) 특정 함수의 return 값이 어덯게 나오는지 확인하는 테스트 코드
+            - ex) df의 타입이 pd.DataFrame이 맞는가?
+            - ex) value1에 특정 값이 들어가는가?
+            - 쿼리를 날리고 데이터가 맞는지 정합성 체크하는 것도 일종의 테스트 
+
+        2. 배포
+            - 서버에 새로운 기능 버전 등을 배포
+
+        3. 기타 자동화하고 싶은 스크립트 
+            - 주기적으로 데이터를 수집해서 처리
+
+        4. 다양한 DIV버전에서 실행되는지 확인 
+
+        CI/CD 랑 소프트 웨어를 배포하고 자동으로 업데이트 한다는 개념으로 알고있으면 됨
+        CI(Continuous Intergration) : 지속적인 통합
+        CD(Continuous Delivery)    : 지속적인 배포
+
+#### Github Action Core 개념
+
+- 이게 배포 목적인가 (메인)
+- 아님 코드에 문제가 있냐 없냐는거 차선
+
+- Github Action을 이해하기 위해서 알아야 하는 개념은 Workflow, Event, Job, Step, Action, Runner 등이 있음
+
+    1. Workflow (요리책 (자장면을 만들수있는 레시피)) Event에서 발생한 처리를 어떻게 할건지 목록을 봄
+        - 여러 job으로 구성되고 Evnest에 의해 트리거 될 수 있는 자동화된 프로세스 
+        - 최상위 개념
+        - Workflow 파일은 YAML으로 작성되고, Github Repository의 `.Github/workflows` 폴더 아래에 저장됨 
+
+    2. Event (짜장면이 먹고싶다) 특정 이벤트가 발생하면 처리를 Workflow에 줌
+        - WorkFlow를 Trigger(실행)하는 특정 활동이나 규칙
+        - ex) 특정 브랜치로 push하거나 pull Requst하거나 특정 시간대에 반복(Cron)
+        - Webhook을 사용해 외부 이벤트를 동해 실행 
+
+    3. Jobs Workflow에서 받은 목록에서 어떻게 실행할껀지 보는거 
+        - Job은 여러 Steo으로 구성되고 가상환경의 인스턴스에 실행됨
+        - 다른 Job에 의존 관계를 가질 수 있고 독립적으로 병렬 실행도 가능함
+
+    4. Step
+        - Task들의 집합으로 커맨드를 날리거나 action을 실행할 수 있음 
+
+    5. Actions : 깃허브에서 제공하는 명령어 
+        - Workflow의 가장 작은 블럭(smallest portable building block)
+        - Job을 만들기 위해 Step들을 연결할 수 있음 
+        - 재사용이 가능한 컴포넌트
+        - 개인적으로 만든 Action을 사용할 수도 있고, Marketplace에 있는 공용 Action을 사용 할 수 있음
+
+    6. Runners : Jos을 실행하는 것 
+        - VMRunner 라고도 부른다 
+        - Github에서 호스팅해주는 Github-hosted runner와 직접 호스팅하는 Self-hosted runner로 나뉨
+        - Githun-hosted runner는 Azure의 Standard_v2로 vCPU 2, 메모리 7GB, 임시 스토리지 14GB
+
+    프로젝트 경로 안에 `.github/workflows/(어떤workflow인지 따라서 이름을 정하면됨.yml)` 라고 만들고 
+
+    ```github action
+    name: learn-github-actions // 어떤 월플로이인지 이름을 명시
+    on: [push] // 커밋이 push 될떄마다 실행
+    jobs: // jobs 들이 실행이 된다 위에서 부터 밑 순으로 실행
+    check-bats-version: // 어떤일이 수행하는지 이름에 나와있음
+        run-on: ubuntu-latest  // 어떤 VM머신을 사용할건지 (여긴 우분투의 최신버전을 사용해줘라는 뜻)
+        steps:      //실행 순서: 위에서부터 아래로
+            - uses: action/checkout@v3   // 깃허브에서 제공하는 checkout이라는 액션을 사용
+            - uses: action/setup-node@v3   // 노드를 사용하는 액션 사용
+              with: // 이걸로 밑에있는 노드 버전을 명시하고 있음
+                node-version: '14'
+            - run: npm install -g bats      // 쉘 스크립트를 작성함
+            - run: bats -v
+
+    ```
+    
 
 
 
