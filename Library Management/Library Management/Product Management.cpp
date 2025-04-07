@@ -65,7 +65,6 @@ public:
     }
 };
 
-// 臂肺国 惑前 历厘家
 vector<Product*> products;
 
 void ShowMenu() {
